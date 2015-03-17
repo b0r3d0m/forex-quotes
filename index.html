@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="ru">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+
+  <title>Forex Quotes</title>
+
+  <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+  <script type="text/javascript" src="js/jquery.xdomainajax.js"></script>
+  <script type="text/javascript" src="js/jquery.xpath.min.js"></script>
+
+  <script type="text/javascript">
+
+    function updateAlpariQuotes() {
+      $.get('http://www.alpari.ru/informers/rates/pro', function(data) {
+        var html = $(data.responseText);
+
+        var quotes = JSON.parse(html.text());
+        for (var i = 0; i < quotes.length; i++) {
+          var quote = quotes[i];
+
+          var symbol = quote['symbol'];
+          if (symbol == 'EURUSD') {
+            var bid = quote['bid'];
+            var ask = quote['ask'];
+            
+            $('#alpariEURUSDBid').text(bid);
+            $('#alpariEURUSDAsk').text(ask);
+          }
+        }
+      });
+
+      setTimeout(updateAlpariQuotes, 1000);
+    }
+
+    function updateInstaForexQuotes() {
+      $.get('https://www.instaforex.com/', function(data) {
+        var html = $(data.responseText);
+
+        var bid = html.xpath('//*[@id="symbol_EURUSD"]/td[3]')[0].textContent;
+        var ask = html.xpath('//*[@id="symbol_EURUSD"]/td[4]')[0].textContent;
+
+        $('#instaforexEURUSDBid').text(bid);
+        $('#instaforexEURUSDAsk').text(ask);
+      });
+
+      setTimeout(updateInstaForexQuotes, 1000);
+    }
+
+    window.onload = function() {
+      updateAlpariQuotes();
+      updateInstaForexQuotes();
+    };
+
+    function updateForexClubQuotes() {
+      $.get('http://www.fxclub.org/sites/all/libraries/forex_rates/tunnel-rates.php?curr=EUR&chart_engine=native&currlist=EUR&timezone=Europe/Moscow&update_time_list=1', function(data) {
+        var html = $(data.responseText);
+
+        var quotes = JSON.parse(html.text());
+
+        var EURUSDInfo = quotes['list']['EUR'];
+        var bid = EURUSDInfo['bid-close'];
+        var ask = EURUSDInfo['ask-close'];
+
+        $('#forexclubEURUSDBid').text(bid);
+        $('#forexclubEURUSDAsk').text(ask);
+      });
+
+      setTimeout(updateForexClubQuotes, 1000);
+    }
+
+    window.onload = function() {
+      updateAlpariQuotes();
+      updateInstaForexQuotes();
+      updateForexClubQuotes();
+    };
+
+  </script>
+</head>
+<body>
+  <table border="2">
+    <tr>
+      <th>Broker</th><th>EURUSD bid</th><th>EURUSD ask</th>
+    </tr>
+    <tr>
+      <td><img src="alpari.jpg" alt="Alpari" height="42" width="42"></td>
+      <td id=alpariEURUSDBid>N/A</td>
+      <td id=alpariEURUSDAsk>N/A</td>
+    </tr>
+    <tr>
+      <td><img src="instaforex.jpg" alt="InstaForex" height="42" width="42"></td>
+      <td id=instaforexEURUSDBid>N/A</td>
+      <td id=instaforexEURUSDAsk>N/A</td>
+    </tr>
+    <tr>
+      <td><img src="forexclub.jpg" alt="ForexClub" height="42" width="42"></td>
+      <td id=forexclubEURUSDBid>N/A</td>
+      <td id=forexclubEURUSDAsk>N/A</td>
+    </tr>
+  </table>
+</body>
+</html>
