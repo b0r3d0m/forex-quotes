@@ -34,6 +34,7 @@
     }
 
     function updateInstaForexQuotes() {
+      // InstaForex uses WebSocket on their site but it seems like it works only for the localhost where the site is located, so let's parse HTML
       $.get('https://www.instaforex.com/', function(data) {
         var html = $(data.responseText);
 
@@ -151,11 +152,38 @@
       });
     }
 
+    // quotes_jsonp is the harcoded name on the RoboForex side, so we can't change it
+    function quotes_jsonp(data) {
+      for (var i = 0; i < data.rows.length; i++) {
+        var quote = data.rows[i];
+
+        var symbol = quote['name'];
+        if (symbol == 'EURUSD') {
+          var bid = quote['bid'];
+          var ask = quote['ask'];
+          
+          $('#roboforexEURUSDBid').text(bid);
+          $('#roboforexEURUSDAsk').text(ask);
+        }
+      }
+    }
+
+    function updateRoboForexQuotes() {
+      // Usage of the get method here results in the following error -- "XMLHttpRequest cannot load file:///xxx. Cross origin requests are only supported for protocol schemes"
+      $.ajax({
+        url: 'https://my.roboforex.com/app/cache/common/quotes_cats.json?callback=quotes_jsonp',
+        dataType: 'jsonp'
+      });
+
+      setTimeout(updateRoboForexQuotes, 1000);
+    }
+
     window.onload = function() {
       updateAlpariQuotes();
       updateInstaForexQuotes();
       updateForexClubQuotes();
       updateFxProQuotes();
+      updateRoboForexQuotes();
     };
 
   </script>
@@ -184,6 +212,11 @@
       <td><img src="fxpro.gif" alt="FxPro" height="42" width="42"></td>
       <td id=fxproEURUSDBid>N/A</td>
       <td id=fxproEURUSDAsk>N/A</td>
+    </tr>
+    <tr>
+      <td><img src="roboforex.png" alt="RoboForex" height="42" width="42"></td>
+      <td id=roboforexEURUSDBid>N/A</td>
+      <td id=roboforexEURUSDAsk>N/A</td>
     </tr>
   </table>
 </body>
