@@ -28,9 +28,10 @@
             $('#alpariEURUSDAsk').text(ask);
           }
         }
+      })
+      .always(function() {
+        setTimeout(updateAlpariQuotes, 1000);
       });
-
-      setTimeout(updateAlpariQuotes, 1000);
     }
 
     function updateInstaForexQuotes() {
@@ -43,9 +44,10 @@
 
         $('#instaforexEURUSDBid').text(bid);
         $('#instaforexEURUSDAsk').text(ask);
+      })
+      .always(function() {
+        setTimeout(updateInstaForexQuotes, 1000);
       });
-
-      setTimeout(updateInstaForexQuotes, 1000);
     }
 
     function updateForexClubQuotes() {
@@ -60,9 +62,10 @@
 
         $('#forexclubEURUSDBid').text(bid);
         $('#forexclubEURUSDAsk').text(ask);
+      })
+      .always(function() {
+        setTimeout(updateForexClubQuotes, 1000);
       });
-
-      setTimeout(updateForexClubQuotes, 1000);
     }
 
     function getAsk(pair) {
@@ -166,6 +169,8 @@
           $('#roboforexEURUSDAsk').text(ask);
         }
       }
+
+      setTimeout(updateRoboForexQuotes, 1000);
     }
 
     function updateRoboForexQuotes() {
@@ -174,50 +179,54 @@
         url: 'https://my.roboforex.com/app/cache/common/quotes_cats.json?callback=quotes_jsonp',
         dataType: 'jsonp'
       });
-
-      setTimeout(updateRoboForexQuotes, 1000);
     }
 
-    window.onload = function() {
+    $(function () {
       updateAlpariQuotes();
       updateInstaForexQuotes();
       updateForexClubQuotes();
       updateFxProQuotes();
       updateRoboForexQuotes();
-    };
+    });
 
   </script>
 </head>
 <body>
   <table border="2">
-    <tr>
-      <th>Broker</th><th>EURUSD bid</th><th>EURUSD ask</th>
-    </tr>
-    <tr>
-      <td><img src="alpari.jpg" alt="Alpari" height="42" width="42"></td>
-      <td id=alpariEURUSDBid>N/A</td>
-      <td id=alpariEURUSDAsk>N/A</td>
-    </tr>
-    <tr>
-      <td><img src="instaforex.jpg" alt="InstaForex" height="42" width="42"></td>
-      <td id=instaforexEURUSDBid>N/A</td>
-      <td id=instaforexEURUSDAsk>N/A</td>
-    </tr>
-    <tr>
-      <td><img src="forexclub.jpg" alt="ForexClub" height="42" width="42"></td>
-      <td id=forexclubEURUSDBid>N/A</td>
-      <td id=forexclubEURUSDAsk>N/A</td>
-    </tr>
-    <tr>
-      <td><img src="fxpro.gif" alt="FxPro" height="42" width="42"></td>
-      <td id=fxproEURUSDBid>N/A</td>
-      <td id=fxproEURUSDAsk>N/A</td>
-    </tr>
-    <tr>
-      <td><img src="roboforex.png" alt="RoboForex" height="42" width="42"></td>
-      <td id=roboforexEURUSDBid>N/A</td>
-      <td id=roboforexEURUSDAsk>N/A</td>
-    </tr>
+    <thead>
+      <tr>
+        <th>Broker</th>
+        <th>EURUSD bid</th>
+        <th>EURUSD ask</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><img src="alpari.jpg" alt="Alpari" height="42" width="42"></td>
+        <td id=alpariEURUSDBid>N/A</td>
+        <td id=alpariEURUSDAsk>N/A</td>
+      </tr>
+      <tr>
+        <td><img src="instaforex.jpg" alt="InstaForex" height="42" width="42"></td>
+        <td id=instaforexEURUSDBid>N/A</td>
+        <td id=instaforexEURUSDAsk>N/A</td>
+      </tr>
+      <tr>
+        <td><img src="forexclub.jpg" alt="ForexClub" height="42" width="42"></td>
+        <td id=forexclubEURUSDBid>N/A</td>
+        <td id=forexclubEURUSDAsk>N/A</td>
+      </tr>
+      <tr>
+        <td><img src="fxpro.gif" alt="FxPro" height="42" width="42"></td>
+        <td id=fxproEURUSDBid>N/A</td>
+        <td id=fxproEURUSDAsk>N/A</td>
+      </tr>
+      <tr>
+        <td><img src="roboforex.png" alt="RoboForex" height="42" width="42"></td>
+        <td id=roboforexEURUSDBid>N/A</td>
+        <td id=roboforexEURUSDAsk>N/A</td>
+      </tr>
+    </tbody>
   </table>
 </body>
 </html>
