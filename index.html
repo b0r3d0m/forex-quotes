@@ -200,6 +200,33 @@
       });
     }
 
+    function updateTeleTradeQuotes() {
+      $.get('http://data.teletrade-dj.com/data/symbols/all.json', function(data) {
+        // It seems like TeleTrade hardcoded callback function, so let's parse the response manually
+        var html = $(data.responseText);
+
+        var quotes = html.text();
+        quotes = quotes.substring(0, quotes.length - 2).replace('Mtquote_all.drawTable(', '');
+
+        var quotesArr = JSON.parse(quotes);
+        for (var i = 0; i < quotesArr.length; i++) {
+          var quote = quotesArr[i];
+
+          var symbol = quote['symbol'];
+          if (symbol == 'EURUSD') {
+            var bid = quote['bid'];
+            var ask = quote['ask'];
+            
+            $('#teletradeEURUSDBid').text(bid);
+            $('#teletradeEURUSDAsk').text(ask);
+          }
+        }
+      })
+      .always(function() {
+        setTimeout(updateTeleTradeQuotes, 1000);
+      });
+    }
+
     $(function () {
       updateAlpariQuotes();
       updateInstaForexQuotes();
@@ -207,6 +234,7 @@
       updateFxProQuotes();
       updateRoboForexQuotes();
       updateFXCMQuotes();
+      updateTeleTradeQuotes();
     });
 
   </script>
@@ -222,34 +250,39 @@
     </thead>
     <tbody>
       <tr>
-        <td><img src="alpari.jpg" alt="Alpari" height="42" width="42"></td>
+        <td><img src="alpari.jpg" alt="Alpari" height="84" width="84"></td>
         <td id=alpariEURUSDBid>N/A</td>
         <td id=alpariEURUSDAsk>N/A</td>
       </tr>
       <tr>
-        <td><img src="instaforex.jpg" alt="InstaForex" height="42" width="42"></td>
+        <td><img src="instaforex.jpg" alt="InstaForex" height="84" width="84"></td>
         <td id=instaforexEURUSDBid>N/A</td>
         <td id=instaforexEURUSDAsk>N/A</td>
       </tr>
       <tr>
-        <td><img src="forexclub.jpg" alt="ForexClub" height="42" width="42"></td>
+        <td><img src="forexclub.jpg" alt="ForexClub" height="84" width="84"></td>
         <td id=forexclubEURUSDBid>N/A</td>
         <td id=forexclubEURUSDAsk>N/A</td>
       </tr>
       <tr>
-        <td><img src="fxpro.gif" alt="FxPro" height="42" width="42"></td>
+        <td><img src="fxpro.gif" alt="FxPro" height="84" width="84"></td>
         <td id=fxproEURUSDBid>N/A</td>
         <td id=fxproEURUSDAsk>N/A</td>
       </tr>
       <tr>
-        <td><img src="roboforex.png" alt="RoboForex" height="42" width="42"></td>
+        <td><img src="roboforex.png" alt="RoboForex" height="84" width="84"></td>
         <td id=roboforexEURUSDBid>N/A</td>
         <td id=roboforexEURUSDAsk>N/A</td>
       </tr>
       <tr>
-        <td><img src="fxcm.png" alt="FXCM" height="42" width="42"></td>
+        <td><img src="fxcm.png" alt="FXCM" height="84" width="84"></td>
         <td id=fxcmEURUSDBid>N/A</td>
         <td id=fxcmEURUSDAsk>N/A</td>
+      </tr>
+      <tr>
+        <td><img src="teletrade.jpg" alt="TeleTrade" height="84" width="84"></td>
+        <td id=teletradeEURUSDBid>N/A</td>
+        <td id=teletradeEURUSDAsk>N/A</td>
       </tr>
     </tbody>
   </table>
