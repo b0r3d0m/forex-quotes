@@ -11,6 +11,8 @@
 
   <script type="text/javascript">
 
+    // Alpari
+
     function updateAlpariQuotes() {
       $.get('http://www.alpari.ru/informers/rates/pro', function(data) {
         var html = $(data.responseText);
@@ -34,13 +36,16 @@
       });
     }
 
+    // InstaForex
+
     function updateInstaForexQuotes() {
-      // InstaForex uses WebSocket on their site but it seems like it works only for the localhost where the site is located, so let's parse HTML
-      $.get('https://www.instaforex.com/', function(data) {
+      $.get('http://quotes.instaforex.com/get_quotes.php?m=json&q=eurusd', function(data) {
         var html = $(data.responseText);
 
-        var bid = html.xpath('//*[@id="symbol_EURUSD"]/td[3]')[0].textContent;
-        var ask = html.xpath('//*[@id="symbol_EURUSD"]/td[4]')[0].textContent;
+        var quote = JSON.parse(html.text())['EURUSD'];
+
+        var bid = quote['bid'];
+        var ask = quote['ask'];
 
         $('#instaforexEURUSDBid').text(bid);
         $('#instaforexEURUSDAsk').text(ask);
@@ -49,6 +54,8 @@
         setTimeout(updateInstaForexQuotes, 1000);
       });
     }
+
+    // ForexClub
 
     function updateForexClubQuotes() {
       $.get('http://www.fxclub.org/sites/all/libraries/forex_rates/tunnel-rates.php?curr=EUR&chart_engine=native&currlist=EUR&timezone=Europe/Moscow&update_time_list=1', function(data) {
@@ -67,6 +74,8 @@
         setTimeout(updateForexClubQuotes, 1000);
       });
     }
+
+    // FxPro
 
     function getAsk(pair) {
       if (pair.B == null) {
@@ -155,6 +164,8 @@
       });
     }
 
+    // RoboForex
+
     // quotes_jsonp is the harcoded name on the RoboForex side, so we can't change it
     function quotes_jsonp(data) {
       for (var i = 0; i < data.rows.length; i++) {
@@ -181,6 +192,8 @@
       });
     }
 
+    // FXCM
+
     function fxcmQuotesReceived(data) {
       var quote = data['Rates'][0];
 
@@ -199,6 +212,8 @@
         dataType: 'jsonp'
       });
     }
+
+    // TeleTrade
 
     function updateTeleTradeQuotes() {
       $.get('http://data.teletrade-dj.com/data/symbols/all.json', function(data) {
