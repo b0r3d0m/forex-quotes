@@ -181,12 +181,32 @@
       });
     }
 
+    function fxcmQuotesReceived(data) {
+      var quote = data['Rates'][0];
+
+      var bid = quote['Bid'];
+      var ask = quote['Ask'];
+
+      $('#fxcmEURUSDBid').text(bid);
+      $('#fxcmEURUSDAsk').text(ask);
+
+      setTimeout(updateFXCMQuotes, 1000);
+    }
+
+    function updateFXCMQuotes() {
+      $.ajax({
+        url: 'http://ratesjson.fxcm.com/DataDisplayer?symbols=EURUSD&callback=fxcmQuotesReceived',
+        dataType: 'jsonp'
+      });
+    }
+
     $(function () {
       updateAlpariQuotes();
       updateInstaForexQuotes();
       updateForexClubQuotes();
       updateFxProQuotes();
       updateRoboForexQuotes();
+      updateFXCMQuotes();
     });
 
   </script>
@@ -225,6 +245,11 @@
         <td><img src="roboforex.png" alt="RoboForex" height="42" width="42"></td>
         <td id=roboforexEURUSDBid>N/A</td>
         <td id=roboforexEURUSDAsk>N/A</td>
+      </tr>
+      <tr>
+        <td><img src="fxcm.png" alt="FXCM" height="42" width="42"></td>
+        <td id=fxcmEURUSDBid>N/A</td>
+        <td id=fxcmEURUSDAsk>N/A</td>
       </tr>
     </tbody>
   </table>
